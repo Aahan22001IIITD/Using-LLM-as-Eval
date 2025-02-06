@@ -5,11 +5,8 @@ from typing import Dict, Optional
 import ollama
 import os
 os.environ["OLLAMA_HOST"] = "192.168.23.138:11439"
-# Setup Logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
-
-# Load JSON Data
 def load_json(filepath: str) -> Dict:
     try:
         with open(filepath, "r", encoding="utf-8") as file:
@@ -20,8 +17,6 @@ def load_json(filepath: str) -> Dict:
     except json.JSONDecodeError:
         logger.error(f"Invalid JSON in file: {filepath}")
         raise
-
-# Extract Valid JSON from LLM Output
 def extract_json_from_response(response_text: str) -> Optional[Dict]:
     try:
         json_match = re.search(r"\{.*\}", response_text, re.DOTALL)  # Extracts only JSON part
@@ -34,7 +29,6 @@ def extract_json_from_response(response_text: str) -> Optional[Dict]:
         logger.error(f"JSON parsing error: {e}")
         return None
 
-# Generate Evaluation Prompt
 def generate_evaluation_prompt(ground_truth: Dict, test_procedure: str) -> str:
     return f"""
 You are an expert evaluator assessing the accuracy, completeness, clarity, and safety of a scientific experiment procedure.
@@ -64,8 +58,6 @@ Each probability value must be between 0 and 1 and sum to 1.
 ### **Test Procedure**
 {test_procedure}
 """
-
-# Evaluate Experiment with LLM
 def evaluate_experiment(title: str, ground_truth: Dict, test_procedure: str) -> Optional[Dict]:
     prompt = generate_evaluation_prompt(ground_truth, test_procedure)
 
@@ -86,7 +78,6 @@ def evaluate_experiment(title: str, ground_truth: Dict, test_procedure: str) -> 
         logger.error(f"Error evaluating {title}: {e}")
         return None
 
-# Reward Calculation
 def calculate_reward(evaluation_result: Dict) -> float:
     """
     Calculate a reward based on evaluation scores.
@@ -118,19 +109,12 @@ def calculate_reward(evaluation_result: Dict) -> float:
         logger.error(f"Reward calculation error: {e}")
         return 0
 
-# Run Evaluation Process
 def run_evaluation(ground_truth_path: str, results_path: str, output_path: str):
-    # Load Data
     ground_truth_data = load_json(ground_truth_path)
     llm_generated_results = load_json(results_path)
-
-    # Convert ground truth to a dictionary with experiment titles as keys
     ground_truth_dict = {exp["title"]: exp for exp in ground_truth_data["experiments"]}
-
-    # Evaluate experiments
     evaluation_results = {}
     rewards = {}
-
     for title, test_procedure in llm_generated_results.items():
         ground_truth = ground_truth_dict.get(title)
 
@@ -141,19 +125,14 @@ def run_evaluation(ground_truth_path: str, results_path: str, output_path: str):
             if result:
                 evaluation_results[title] = result
                 rewards[title] = calculate_reward(result)
-
-    # Save Results
     output_data = {
         "evaluations": evaluation_results,
         "rewards": rewards
     }
-
     with open(output_path, "w", encoding="utf-8") as file:
         json.dump(output_data, file, indent=4, ensure_ascii=False)
 
     logger.info(f"Evaluation complete! Results saved to '{output_path}'.")
-
-# Execute Evaluation
 run_evaluation(
     ground_truth_path="experiments.json",
     results_path="result.json",

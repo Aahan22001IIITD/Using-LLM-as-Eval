@@ -1,0 +1,107 @@
+{
+    "experiments": [
+      {
+        "title": "Ohm's Law Verification",
+        "objective": "To verify the relationship between voltage (V), current (I), and resistance (R) in an electrical circuit, as expressed by Ohm's Law: V = IR",
+        "materials": [
+          "DC Power Supply",
+          "Resistor of Known Value (e.g., 100Ω)",
+          "Ammeter",
+          "Voltmeter",
+          "Connecting Wires",
+          "Breadboard (optional)"
+        ],
+        "procedure": {
+          "circuit_setup": [
+            "Connect the resistor in series with the ammeter to measure current.",
+            "Connect the power supply in series with the resistor, and connect the voltmeter across the resistor to measure voltage."
+          ],
+          "initial_settings": [
+            "Set the power supply to a low voltage value (e.g., 1V).",
+            "Ensure the power supply is set to provide a constant voltage."
+          ],
+          "measurement": [
+            "Record the initial voltage across the resistor using the voltmeter and the current through the circuit using the ammeter.",
+            "Incrementally increase the voltage output from the power supply in small steps (e.g., 1V).",
+            "For each increment, measure and record the voltage and current.",
+            "Repeat this process at least 5-10 times for accuracy."
+          ],
+          "analysis": [
+            "Plot a graph of voltage (y-axis) vs. current (x-axis).",
+            "The slope of the line represents the resistance (R) of the resistor: R = V / I.",
+            "The slope should remain constant, confirming Ohm's Law."
+          ]
+        }
+      },
+      {
+        "title": "Kirchhoff's Voltage and Current Laws (KVL and KCL)",
+        "objective": "To apply Kirchhoff's Voltage Law (KVL) and Kirchhoff's Current Law (KCL) to analyze and validate simple electrical circuits.",
+        "materials": [
+          "DC Power Supply",
+          "Two Resistors of Known Values (e.g., 100Ω, 200Ω)",
+          "Ammeter",
+          "Voltmeter",
+          "Connecting Wires",
+          "Breadboard (optional)"
+        ],
+        "procedure": {
+          "circuit_setup": {
+            "KVL_Circuit": [
+              "Construct a series circuit with two resistors and the power supply.",
+              "Use the voltmeter to measure voltage across each resistor.",
+              "Connect the ammeter in series to measure current."
+            ],
+            "KCL_Circuit": [
+              "Construct a parallel circuit with two resistors and the power supply.",
+              "Split the current into two branches: one through each resistor."
+            ]
+          },
+          "measurement": [
+            "For the series circuit, measure and record the voltage across each resistor and the total current.",
+            "For the parallel circuit, measure and record the current in each branch.",
+            "Verify that the sum of the currents entering the junction equals the sum of the currents leaving the junction."
+          ],
+          "analysis": [
+            "Apply Kirchhoff's Current Law (KCL): ∑ I_in = ∑ I_out.",
+            "Apply Kirchhoff's Voltage Law (KVL): ∑ V_loop = 0.",
+            "Confirm that measurements adhere to KVL and KCL.",
+            "Discuss conservation of charge (KCL) and energy conservation (KVL)."
+          ]
+        }
+      },
+      {
+        "title": "Series and Parallel Circuits",
+        "objective": "To study the behavior of resistors in series and parallel configurations, including the equivalent resistance calculation.",
+        "materials": [
+          "DC Power Supply",
+          "Three Resistors of Known Values (e.g., 100Ω, 150Ω, 200Ω)",
+          "Ammeter",
+          "Voltmeter",
+          "Connecting Wires",
+          "Breadboard"
+        ],
+        "procedure": {
+          "series_circuit": [
+            "Connect the three resistors in series with the power supply.",
+            "Measure the total voltage across the series combination using the voltmeter.",
+            "Record the current through the circuit using the ammeter."
+          ],
+          "parallel_circuit": [
+            "Connect the three resistors in parallel with the power supply.",
+            "Measure the voltage across each resistor using the voltmeter.",
+            "Measure the total current supplied by the power supply."
+          ],
+          "calculation": [
+            "For the series circuit, calculate total resistance: R_total = R_1 + R_2 + R_3.",
+            "For the parallel circuit, calculate equivalent resistance: 1/R_total = 1/R_1 + 1/R_2 + 1/R_3.",
+            "Verify calculated values with measured voltage and current."
+          ],
+          "analysis": [
+            "Compare theoretical and measured resistance values.",
+            "Discuss how current behaves in series vs. parallel circuits."
+          ]
+        }
+      }
+    ]
+}
+  

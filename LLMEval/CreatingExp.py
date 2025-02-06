@@ -54,7 +54,6 @@ def enhancedprompt(exp):
 
     """
     return test_prompt.format(exp=exp)
-## function to the run our prompt 
 def runprompt(prompt):
     try:    
         print("Running the prompt!")

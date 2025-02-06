@@ -5,7 +5,6 @@ import re
 import os
 model_name = "mistral"
 os.environ["OLLAMA_HOST"] = "192.168.23.138:11439"
-## We would be using mistral for generating experiments for now 
 def getprompt(exp):
     print("Getting the Prompt for : "+exp)
     test_prompt = """

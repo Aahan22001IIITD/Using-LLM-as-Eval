@@ -31,88 +31,89 @@ def extract_json_from_response(response_text: str) -> Optional[Dict]:
         return None
 
 def generate_evaluation_prompt(ground_truth: Dict, test_procedure: Dict) -> str:
-    return f"""
-You are an expert evaluator assessing the accuracy, completeness, clarity, and safety of a scientific experiment procedure. Your primary task is to carefully compare the Test Procedure against the Ground Truth, which serves as the reference standard.
+    return f"""You are an expert evaluator assessing the accuracy, completeness, clarity, and safety of an electronics experiment procedure. Your primary task is to compare the Test Procedure against the Ground Truth, which serves as the reference standard.
 
-### **Ground Truth Procedure**
-{json.dumps(ground_truth, indent=2)}
+        Ground Truth Procedure
+        {json.dumps(ground_truth, indent=2)}
 
-### **Test Procedure**
-{json.dumps(test_procedure, indent=2)}
+        Test Procedure
+        {json.dumps(test_procedure, indent=2)}
 
-### **Task**
-Meticulously compare the **Test Procedure** against the **Ground Truth** and evaluate it across four key dimensions. Provide a **probability distribution over scores [1,2,3,4,5]** for each category. The scores should strongly reflect how well the Test Procedure matches the Ground Truth.
+        Evaluation Criteria & Scoring Guidelines
+        Evaluate the Test Procedure using the following dimensions, ensuring your assessment is tailored to the unique needs of electronics experiments.
 
-### **Evaluation Criteria & Scoring Guidelines**
-1. **Accuracy** (Match with Ground Truth):
-   - Score 5: Near-perfect match with ground truth (>95% accuracy)
-   - Score 4: Minor deviations but maintains core accuracy (80-95%)
-   - Score 3: Some notable differences (60-80%)
-   - Score 2: Significant deviations (40-60%)
-   - Score 1: Major inaccuracies (<40%)
+        Accuracy (Correctness and Precision)
+        Score 5: Near-perfect match with ground truth, including correct component values, circuit connections, and instrument settings (>95% accuracy).
+        Score 4: Minor deviations that do not affect experimental outcomes (80-95%).
+        Score 3: Some notable errors in component specifications, wiring, or settings that could impact results (60-80%).
+        Score 2: Significant inaccuracies that compromise core experiment functionality (40-60%).
+        Score 1: Major errors making the experiment unsafe or non-functional (<40%).
 
-2. **Completeness** (Coverage of Ground Truth):
-   - Score 5: Contains all elements from ground truth (>95%)
-   - Score 4: Missing only minor details (80-95%)
-   - Score 3: Missing some important elements (60-80%)
-   - Score 2: Missing major components (40-60%)
-   - Score 1: Severely incomplete (<40%)
+        Completeness (Coverage of Required Steps and Details)
+        Score 5: All steps, components, and conditions are present and well-defined (>95%).
+        Score 4: Minor omissions that don't impact experimental outcomes (80-95%).
+        Score 3: Missing some important details, such as critical measurements, equipment setup, or observation steps (60-80%).
+        Score 2: Major omissions affecting the experiment's integrity (40-60%).
+        Score 1: Severely incomplete, omitting core steps, critical components, or observations (<40%).
 
-3. **Clarity** (Compared to Ground Truth):
-   - Score 5: Matches or exceeds ground truth clarity
-   - Score 4: Very clear with minor presentation issues
-   - Score 3: Generally clear but needs improvement
-   - Score 2: Unclear in several areas
-   - Score 1: Very unclear or confusing
+        Clarity (Ease of Understanding and Reproducibility)
+        Score 5: Clearer than the ground truth or equally clear, with detailed instructions, diagrams, and well-defined steps.
+        Score 4: Mostly clear but may lack minor clarifications or formatting improvements.
+        Score 3: Instructions are somewhat ambiguous, potentially requiring interpretation or additional guidance.
+        Score 2: Unclear in several steps, risking procedural errors.
+        Score 1: Highly confusing, disorganized, or poorly written.
 
-4. **Safety** (Safety Measures vs Ground Truth):
-   - Score 5: Matches or exceeds safety measures in ground truth
-   - Score 4: Contains most safety measures with minor omissions
-   - Score 3: Missing some important safety points
-   - Score 2: Inadequate safety coverage
-   - Score 1: Critical safety issues or omissions
+        Safety (Adherence to Safety Protocols and Precautions)
+        Score 5: Matches or exceeds ground truth safety measures, including proper ESD precautions, correct handling of power sources, and clear warnings for hazardous steps.
+        Score 4: Contains most key safety measures but may lack minor details.
+        Score 3: Missing some important safety points that pose moderate risk.
+        Score 2: Inadequate safety guidance, posing potential hazards.
+        Score 1: Critical safety issues or complete lack of precautionary steps.
 
-### **Important Notes**
-- When Test Procedure closely matches Ground Truth, assign higher probabilities to scores 4 and 5
-- Minor deviations should result in small probability shifts from 5 to 4
-- Only assign high probabilities to lower scores for significant deviations
-- The evaluation should be strict but fair, with Ground Truth as the primary reference
+        Important Electronics-Specific Considerations
+        - Emphasize component values, polarity details, and circuit connections during evaluation.
+        - Ensure steps involving voltage ratings, current limits, and instrument calibration are addressed.
+        - Check for essential safety measures such as discharging capacitors, short-circuit prevention, and power isolation steps.
+        - Highlight the presence of clear circuit diagrams, pin configurations, and proper labeling as part of clarity evaluation.
 
-### **Response Format (Strict JSON)**
-Please provide your evaluation in the following JSON format:
-{{
-  "Accuracy": {{
-    "1": probability,
-    "2": probability,
-    "3": probability,
-    "4": probability,
-    "5": probability
-  }},
-  "Completeness": {{
-    "1": probability,
-    "2": probability,
-    "3": probability,
-    "4": probability,
-    "5": probability
-  }},
-  "Clarity": {{
-    "1": probability,
-    "2": probability,
-    "3": probability,
-    "4": probability,
-    "5": probability
-  }},
-  "Safety": {{
-    "1": probability,
-    "2": probability,
-    "3": probability,
-    "4": probability,
-    "5": probability
-  }}
-}}
+        Response Format (Strict JSON)
+        Please provide your evaluation in the following format:
+        {{
+            "Accuracy": {{
+                "1": probability,
+                "2": probability,
+                "3": probability,
+                "4": probability,
+                "5": probability
+            }},
+            "Completeness": {{
+                "1": probability,
+                "2": probability,
+                "3": probability,
+                "4": probability,
+                "5": probability
+            }},
+            "Clarity": {{
+                "1": probability,
+                "2": probability,
+                "3": probability,
+                "4": probability,
+                "5": probability
+            }},
+            "Safety": {{
+                "1": probability,
+                "2": probability,
+                "3": probability,
+                "4": probability,
+                "5": probability
+            }}
+        }}
 
-Follow this with a brief explanation of your evaluation.
-"""
+        Evaluation Guidance
+        - Assign higher probabilities to scores 4 and 5 when the Test Procedure closely matches the Ground Truth.
+        - Shift probabilities downward if errors, omissions, or clarity issues are significant.
+        - Consider safety lapses with extra caution — even minor gaps may justify lower scores for safety.
+        """
 
 def evaluate_experiment(title: str, ground_truth: Dict, test_procedure: Dict) -> Optional[Dict]:
     # Extract the procedure from ground truth
@@ -178,10 +179,10 @@ def evaluate_experiment(title: str, ground_truth: Dict, test_procedure: Dict) ->
 
 def calculate_reward(evaluation_result: Dict) -> float:
     weights = {
-        "Accuracy": 0.3,
-        "Completeness": 0.25,
-        "Clarity": 0.25,
-        "Safety": 0.2
+        "Accuracy": 0.4,
+        "Completeness": 0.15,
+        "Clarity": 0.15,
+        "Safety": 0.30,
     }
 
     if not isinstance(evaluation_result, dict):
@@ -244,7 +245,7 @@ def run_evaluation(ground_truth_path: str, results_path: str, output_path: str):
     logger.info(f"Evaluation complete! Results saved to '{output_path}'.")
 
 run_evaluation(
-    ground_truth_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\1exp.json",
-    results_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\phiReAct_Final_3_reformatted.json",
-    output_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\evaluation_results.json"
+    ground_truth_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\exp.json",
+    results_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\results.json",
+    output_path="C:\\Users\\aahan\\Desktop\\college\\SEM 6\\IP\\Using LLM as an evaluator\\evaluation_results_ns_rxp.json"
 )
